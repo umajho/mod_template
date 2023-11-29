@@ -1,0 +1,19 @@
+[package]
+name = "flex_mod_macros"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+flex_mod_macros_core.workspace = true
+
+lazy_static = "1.4.0"
+proc-macro-error = "1.0.4"
+proc-macro2 = "1.0.70"
+quote = "1.0.33"
+syn = { version = "2.0.39", features = ["full"] }

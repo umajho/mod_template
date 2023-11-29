@@ -1,0 +1,15 @@
+error: this attribute can only be applied to an `fn`
+ --> should-fail/1_1-only-fn.rs:5:1
+  |
+5 | #[construct]
+  | ^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `construct` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: this attribute can only be applied to an `fn`
+ --> should-fail/1_1-only-fn.rs:8:1
+  |
+8 | #[extend_parameter_list(..)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `extend_parameter_list` (in Nightly builds, run with -Z macro-backtrace for more info)

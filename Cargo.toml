@@ -1,0 +1,18 @@
+[workspace]
+
+resolver = "2"
+
+members = ["flex_mod", "flex_mod_macros", "flex_mod_macros_core", "ui_tests"]
+
+[workspace.package]
+version = "0.0.1"
+license = "MIT"
+edition = "2021"
+authors = ["Umaĵo <umajho@proton.me>"]
+repository = "https://github.com/umajho/flex_mod"
+
+[workspace.dependencies]
+
+flex_mod = { version = "0.0.1", path = "flex_mod" }
+flex_mod_macros = { version = "0.0.1", path = "flex_mod_macros" }
+flex_mod_macros_core = { version = "0.0.1", path = "flex_mod_macros_core" }

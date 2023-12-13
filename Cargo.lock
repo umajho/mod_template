@@ -620,14 +620,14 @@ dependencies = [
 
 [[package]]
 name = "mod_template"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "mod_template_macros",
 ]
 
 [[package]]
 name = "mod_template_macros"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "lazy_static",
  "proc-macro-error",
@@ -1471,7 +1471,7 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
 
 [[package]]
 name = "ui_tests"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "mod_template",

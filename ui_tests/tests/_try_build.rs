@@ -17,7 +17,7 @@ fn ui() {
         {
             continue;
         }
-        if entry.file_name().as_bytes().get(0) == Some(b'_').as_ref() {
+        if entry.file_name().as_bytes().first() == Some(b'_').as_ref() {
             continue;
         }
         pass_cases.push(entry.path());

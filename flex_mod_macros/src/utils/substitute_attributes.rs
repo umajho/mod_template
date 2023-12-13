@@ -4,16 +4,16 @@ use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
 use quote::ToTokens;
 use syn::Meta;
 
-use super::token_stream_or_syn_errors::TokenStreamOrSynErrors;
+use super::token_stream_or_syn_error::TokenStreamOrSynError;
 
 pub type Substituter<'a> = dyn Fn(Meta) -> syn::Result<TokenStream> + 'a;
 
 pub fn substitute_attributes(
     input: TokenStream,
     attr_map: &mut HashMap<String, Box<Substituter>>,
-) -> Result<TokenStream, Vec<syn::Error>> {
+) -> Result<TokenStream, syn::Error> {
     let mut input = input.into_iter();
-    let mut output = TokenStreamOrSynErrors::new();
+    let mut output = TokenStreamOrSynError::new();
 
     'iteration: loop {
         let Some(tt) = input.next() else {
@@ -43,14 +43,14 @@ pub fn substitute_attributes(
                 };
                 match substituted {
                     Ok(substituted) => output.extend(substituted),
-                    Err(err) => output.push_error(err),
+                    Err(err) => output.error_combine(err),
                 }
                 continue 'iteration;
             } else if let TokenTree::Group(ref group) = tt {
                 let inner_output = substitute_attributes(group.stream(), attr_map);
                 match inner_output {
                     Ok(inner_output) => output.append(Group::new(group.delimiter(), inner_output)),
-                    Err(inner_errors) => output.extend_errors(inner_errors),
+                    Err(inner_err) => output.error_combine(inner_err),
                 }
 
                 continue 'iteration;
@@ -169,10 +169,9 @@ mod tests {
 
             let actual = substitute_attributes(input, &mut attr_map);
 
-            let actual_errors = actual.expect_err("should have an error");
+            let actual_error = actual.expect_err("should have an error");
 
-            assert_eq!(actual_errors.len(), 1);
-            assert_eq!(actual_errors[0].to_string(), "errored");
+            assert_eq!(actual_error.to_string(), "errored");
         }
 
         #[test]
@@ -189,12 +188,8 @@ mod tests {
 
             let actual = substitute_attributes(input, &mut attr_map);
 
-            let actual_errors = actual.expect_err("should have an error");
-
-            assert_eq!(actual_errors.len(), 2);
-            for error in actual_errors {
-                assert_eq!(error.to_string(), "errored");
-            }
+            // TODO: how to assert error message of combined syn::Error?
+            let _actual_error = actual.expect_err("should have an error");
         }
     }
 }

@@ -109,7 +109,7 @@ fn check_top_mod_on_error_abort(input_item: TokenStream) {
 fn check_helper_attributes(
     input_item: TokenStream,
     opts: &AttributeOptions,
-) -> Result<TokenStream, Vec<syn::Error>> {
+) -> Result<TokenStream, syn::Error> {
     let constructions = {
         let constructions = opts
             .constructions()

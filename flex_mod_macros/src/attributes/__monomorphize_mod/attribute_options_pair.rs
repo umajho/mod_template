@@ -43,7 +43,7 @@ impl syn::parse::Parse for AttributeOptionsPair {
 }
 
 impl AttributeOptionsPair {
-    pub fn validate(&self) -> Result<(), Vec<syn::Error>> {
+    pub fn validate(&self) -> Result<(), syn::Error> {
         macro_rules! map_to_ident {
             ($expr:expr) => {
                 $expr
@@ -64,7 +64,7 @@ impl AttributeOptionsPair {
         let (undecl_attr_substs, undef_attr_substs) =
             utils::diff_by_display(&declared_attr_substs, &defined_attr_substs);
 
-        let mut errs: Vec<syn::Error> = Vec::new();
+        let mut err: Option<syn::Error> = None;
         #[derive(PartialEq, Eq)]
         enum What {
             Undecl,
@@ -89,11 +89,22 @@ impl AttributeOptionsPair {
                 } else {
                     format!("missing target name `{}` in {}", target_name_ident, which)
                 };
-                errs.push(syn::Error::new(target_name_ident.span(), message))
+                let new_err = syn::Error::new(target_name_ident.span(), message);
+                match err {
+                    Some(ref mut err) => {
+                        err.combine(new_err);
+                    }
+                    None => {
+                        err = Some(new_err);
+                    }
+                };
             }
         }
 
-        Ok(())
+        match err {
+            Some(err) => Err(err),
+            None => Ok(()),
+        }
     }
 }
 

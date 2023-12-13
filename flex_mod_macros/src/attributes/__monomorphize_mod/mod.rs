@@ -22,11 +22,10 @@ pub fn __monomorphize_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
         Ok(pair) => pair,
         Err(err) => return err.to_compile_error(),
     };
-    if let Err(errs) = opts_pair.validate() {
+    if let Err(err) = opts_pair.validate() {
         let mut output = TokenStream::new();
-        for err in errs {
-            output.extend(err.to_compile_error());
-        }
+        output.extend(err.to_compile_error());
+
         return output;
     }
 
@@ -62,7 +61,7 @@ const EXPECT_AVAILABLE: &str = "the availability of the definition should alread
 fn monomorphize_items<'a>(
     input_item: TokenStream,
     opts: &'a AttributeOptions,
-) -> Result<TokenStream, Vec<syn::Error>> {
+) -> Result<TokenStream, syn::Error> {
     let opts = Rc::new(opts);
     let opts_for_construct = opts.clone();
     let opts_for_substitute = opts.clone();

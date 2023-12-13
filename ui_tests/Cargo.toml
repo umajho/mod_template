@@ -9,6 +9,9 @@ repository.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
 flex_mod.workspace = true
+
+async-trait = "0.1.74"
+sqlx = { version = "0.7.3", features = ["sqlite", "runtime-tokio"] }
 trybuild = "1.0.85"
+tokio = { version = "1.35.0", features = ["rt", "macros"] }

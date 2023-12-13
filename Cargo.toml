@@ -10,6 +10,7 @@ license = "MIT"
 edition = "2021"
 authors = ["Umaĵo <umajho@proton.me>"]
 repository = "https://github.com/umajho/mod_template"
+description = "Creating macros that define modules from template modules"
 
 [workspace.dependencies]
 

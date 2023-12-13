@@ -5,6 +5,7 @@ license.workspace = true
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+description.workspace = true
 
 [dependencies]
 mod_template_macros.workspace = true

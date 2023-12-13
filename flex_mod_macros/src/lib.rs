@@ -1,3 +1,7 @@
+mod attributes;
+mod helper_attributes;
+mod utils;
+
 /// This attribute defines a function-like macro based on the template module it
 /// annotated. One can define actual modules with variations by calling the
 /// defined macro with different arguments.
@@ -41,7 +45,7 @@ pub fn flex_mod(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    flex_mod_macros_core::flex_mod(attr.into(), item.into()).into()
+    attributes::flex_mod(attr.into(), item.into()).into()
 }
 
 /// This attribute is used by the attribute `flex_mod` internally. One should
@@ -52,7 +56,7 @@ pub fn __monomorphize_mod(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    flex_mod_macros_core::__monomorphize_mod(attr.into(), item.into()).into()
+    attributes::__monomorphize_mod(attr.into(), item.into()).into()
 }
 
 /// Turns something like:
@@ -81,7 +85,7 @@ pub fn construct(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    flex_mod_macros_core::construct(attr.into(), item.into()).into()
+    attributes::construct(attr.into(), item.into()).into()
 }
 
 /// Turns something like:
@@ -108,5 +112,5 @@ pub fn extend_parameter_list(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    flex_mod_macros_core::extend_parameter_list(attr.into(), item.into()).into()
+    attributes::extend_parameter_list(attr.into(), item.into()).into()
 }

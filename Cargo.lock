@@ -22,14 +22,6 @@ dependencies = [
 name = "flex_mod_macros"
 version = "0.0.1"
 dependencies = [
- "flex_mod_macros_core",
- "proc-macro-error",
-]
-
-[[package]]
-name = "flex_mod_macros_core"
-version = "0.0.1"
-dependencies = [
  "lazy_static",
  "proc-macro-error",
  "proc-macro2",

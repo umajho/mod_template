@@ -2,7 +2,7 @@
 
 resolver = "2"
 
-members = ["flex_mod", "flex_mod_macros", "flex_mod_macros_core", "ui_tests"]
+members = ["flex_mod", "flex_mod_macros", "ui_tests"]
 
 [workspace.package]
 version = "0.0.1"
@@ -15,4 +15,3 @@ repository = "https://github.com/umajho/flex_mod"
 
 flex_mod = { version = "0.0.1", path = "flex_mod" }
 flex_mod_macros = { version = "0.0.1", path = "flex_mod_macros" }
-flex_mod_macros_core = { version = "0.0.1", path = "flex_mod_macros_core" }

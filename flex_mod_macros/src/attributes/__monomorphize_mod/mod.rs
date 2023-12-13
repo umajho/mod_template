@@ -123,7 +123,7 @@ fn monomorphize_items<'a>(
 
 #[cfg(test)]
 mod tests {
-    use crate::__monomorphize_mod;
+    use super::__monomorphize_mod;
 
     #[test]
     fn basic() {

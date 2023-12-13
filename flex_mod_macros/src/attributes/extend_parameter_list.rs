@@ -111,7 +111,7 @@ pub enum Direction {
 impl syn::parse::Parse for AttributeOptions {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let _: syn::Token![..] = input.parse()?;
-        let parameter_list: TokenStream = if input.cursor().eof() {
+        let parameter_list: TokenStream = if input.is_empty() {
             TokenStream::new()
         } else {
             let _: syn::Token![,] = input.parse()?;

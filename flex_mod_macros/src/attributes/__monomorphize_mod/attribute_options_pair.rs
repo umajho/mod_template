@@ -33,7 +33,7 @@ impl syn::parse::Parse for AttributeOptionsPair {
             content.parse()?
         };
 
-        if !input.cursor().eof() {
+        if !input.is_empty() {
             let tt: TokenTree = input.parse().unwrap();
             return Err(syn::Error::new(tt.span(), "unexpected"));
         }

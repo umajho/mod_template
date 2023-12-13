@@ -13,7 +13,7 @@ impl syn::parse::Parse for AttributeOptions {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let target_name_ident: syn::Ident = input.parse()?;
 
-        if !input.cursor().eof() {
+        if !input.is_empty() {
             let tt: TokenTree = input.parse().unwrap();
             return Err(syn::Error::new(tt.span(), "unexpected"));
         }

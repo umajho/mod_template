@@ -27,7 +27,7 @@ impl AttributeOptions {
 impl syn::parse::Parse for AttributeOptions {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let macro_name_ident: syn::Ident = input.parse()?;
-        if input.cursor().eof() {
+        if input.is_empty() {
             return Ok(Self {
                 macro_name_ident,
                 constructions: vec![],
@@ -40,7 +40,7 @@ impl syn::parse::Parse for AttributeOptions {
         let mut attribute_substitutions: Option<Vec<AttributeSubstitutionDeclaration>> = None;
 
         loop {
-            if input.cursor().eof() {
+            if input.is_empty() {
                 return Ok(Self {
                     macro_name_ident,
                     constructions: constructions.unwrap_or_default(),
@@ -76,7 +76,7 @@ impl syn::parse::Parse for AttributeOptions {
                 }
             }
 
-            if !input.cursor().eof() {
+            if !input.is_empty() {
                 let _: syn::Token![,] = input.parse()?;
             }
         }

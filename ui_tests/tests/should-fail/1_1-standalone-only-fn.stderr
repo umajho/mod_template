@@ -1,5 +1,5 @@
 error: this attribute can only be applied to an `fn`
- --> should-fail/1_1-standalone-only-fn.rs:5:1
+ --> tests/should-fail/1_1-standalone-only-fn.rs:5:1
   |
 5 | #[construct]
   | ^^^^^^^^^^^^
@@ -7,7 +7,7 @@ error: this attribute can only be applied to an `fn`
   = note: this error originates in the attribute macro `construct` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error: this attribute can only be applied to an `fn`
- --> should-fail/1_1-standalone-only-fn.rs:8:1
+ --> tests/should-fail/1_1-standalone-only-fn.rs:8:1
   |
 8 | #[extend_parameter_list(..)]
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

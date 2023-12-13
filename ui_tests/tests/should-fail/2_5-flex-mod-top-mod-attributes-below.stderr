@@ -1,5 +1,5 @@
 error: attributes directly below the `flex_mod` attribute are not allowed
- --> should-fail/2_5-flex-mod-top-mod-attributes-below.rs:5:1
+ --> tests/should-fail/2_5-flex-mod-top-mod-attributes-below.rs:5:1
   |
 5 | #[flex_mod]
   | ^^^^^^^^^^^

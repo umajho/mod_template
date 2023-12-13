@@ -1,23 +1,23 @@
 error: unknown target name `NOT_FOUND`. It should be declared in the `constructions` block among the options of the `flex_mod` attribute
-  --> should-fail/2_3-flex-mod-unknown-target-names.rs:13:26
+  --> tests/should-fail/2_3-flex-mod-unknown-target-names.rs:13:26
    |
 13 |     #[__CONSTRUCT(foo as NOT_FOUND)]
    |                          ^^^^^^^^^
 
 error: unknown target name `NOT_FOUND`. It should be declared in the `attribute_substitutions` block among the options of the `flex_mod` attribute
-  --> should-fail/2_3-flex-mod-unknown-target-names.rs:16:20
+  --> tests/should-fail/2_3-flex-mod-unknown-target-names.rs:16:20
    |
 16 |     #[__SUBSTITUTE(NOT_FOUND)]
    |                    ^^^^^^^^^
 
 error: unknown target name `ATTR_SUB`. It should be declared in the `constructions` block among the options of the `flex_mod` attribute
-  --> should-fail/2_3-flex-mod-unknown-target-names.rs:19:26
+  --> tests/should-fail/2_3-flex-mod-unknown-target-names.rs:19:26
    |
 19 |     #[__CONSTRUCT(foo as ATTR_SUB)]
    |                          ^^^^^^^^
 
 error: unknown target name `CONS`. It should be declared in the `attribute_substitutions` block among the options of the `flex_mod` attribute
-  --> should-fail/2_3-flex-mod-unknown-target-names.rs:22:20
+  --> tests/should-fail/2_3-flex-mod-unknown-target-names.rs:22:20
    |
 22 |     #[__SUBSTITUTE(CONS)]
    |                    ^^^^

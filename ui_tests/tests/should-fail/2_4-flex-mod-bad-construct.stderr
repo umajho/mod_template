@@ -1,5 +1,5 @@
 error: unexpected end of input, expected `as`
- --> should-fail/2_4-flex-mod-bad-construct.rs:5:1
+ --> tests/should-fail/2_4-flex-mod-bad-construct.rs:5:1
   |
 5 | #[flex_mod(define_foo; constructions(CONS))]
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

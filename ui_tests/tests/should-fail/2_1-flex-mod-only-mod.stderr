@@ -1,5 +1,5 @@
 error: this attribute can only be applied to a `mod`
- --> should-fail/2_1-flex-mod-only-mod.rs:5:1
+ --> tests/should-fail/2_1-flex-mod-only-mod.rs:5:1
   |
 5 | #[flex_mod(define_foo)]
   | ^^^^^^^^^^^^^^^^^^^^^^^

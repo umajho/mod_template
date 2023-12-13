@@ -27,5 +27,5 @@ fn ui() {
         t.pass(case);
     }
 
-    t.compile_fail("./should-fail/*.rs");
+    t.compile_fail("./tests/should-fail/*.rs");
 }

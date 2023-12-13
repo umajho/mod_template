@@ -1,0 +1,7 @@
+error: this attribute can only be applied to a `mod`
+ --> tests/should-fail/2_1-bare.rs:3:1
+  |
+3 | #[mod_template::define(define_foo)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `mod_template::define` (in Nightly builds, run with -Z macro-backtrace for more info)

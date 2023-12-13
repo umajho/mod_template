@@ -1,4 +1,4 @@
-use flex_mod::{construct, extend_parameter_list};
+use mod_template::{construct, extend_parameter_list};
 
 fn main() {}
 

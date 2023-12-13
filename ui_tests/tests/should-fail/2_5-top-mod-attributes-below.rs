@@ -1,7 +1,5 @@
-use flex_mod::flex_mod;
-
 fn main() {}
 
-#[flex_mod]
+#[mod_template::define]
 #[an_attribute]
 mod __ {}

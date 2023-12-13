@@ -31,9 +31,9 @@ pub fn __monomorphize_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let mod_items = {
         let mod_group = (item.into_iter().last())
-            .expect("the `flex_mod` attribute should guarantee that the last element of the input item stream exists");
+            .expect("the attribute `mod_template::define` should guarantee that the last element of the input item stream exists");
         let TokenTree::Group(mod_group) = mod_group else {
-            panic!("the `flex_mod` attribute should guarantee that the last element of the input item is a group")
+            panic!("the attribute `mod_template::define` should guarantee that the last element of the input item is a group");
         };
         mod_group.stream()
     };
@@ -85,7 +85,7 @@ fn monomorphize_items<'a>(
                 let pattern_to_construct = construction.pattern_to_construct();
                 let construction = def.construction();
                 quote::quote!(
-                    #[::flex_mod::construct(#pattern_to_construct = #construction)])
+                    #[::mod_template::construct(#pattern_to_construct = #construction)])
                 .to_tokens(&mut output);
             }
 
@@ -107,7 +107,8 @@ fn monomorphize_items<'a>(
                 .find(|x| *x.target_name_ident() == *helper_opts.target_name_ident())
                 .expect(EXPECT_AVAILABLE);
             if let Some(ext) = def.parameter_list_extension() {
-                quote::quote!(#[::flex_mod::extend_parameter_list(#ext)]).to_tokens(&mut output);
+                quote::quote!(#[::mod_template::extend_parameter_list(#ext)])
+                    .to_tokens(&mut output);
             }
             for new_attribute in def.new_attributes() {
                 new_attribute.to_tokens(&mut output)
@@ -148,8 +149,8 @@ mod tests {
 
         let expected = quote::quote! {
             mod a_mod {
-                #[::flex_mod::construct(to_construct = new_something())]
-                #[::flex_mod::extend_parameter_list(.., a_param: AType)]
+                #[::mod_template::construct(to_construct = new_something())]
+                #[::mod_template::extend_parameter_list(.., a_param: AType)]
                 #[an_attr]
                 fn an_fn() {}
             }

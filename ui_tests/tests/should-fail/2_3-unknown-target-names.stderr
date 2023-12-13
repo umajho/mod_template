@@ -1,0 +1,23 @@
+error: unknown target name `NOT_FOUND`. It should be declared in the `constructions` block among the options of the attribute `mod_template::define`
+  --> tests/should-fail/2_3-unknown-target-names.rs:11:26
+   |
+11 |     #[__CONSTRUCT(foo as NOT_FOUND)]
+   |                          ^^^^^^^^^
+
+error: unknown target name `NOT_FOUND`. It should be declared in the `attribute_substitutions` block among the options of the attribute `mod_template::define`
+  --> tests/should-fail/2_3-unknown-target-names.rs:14:20
+   |
+14 |     #[__SUBSTITUTE(NOT_FOUND)]
+   |                    ^^^^^^^^^
+
+error: unknown target name `ATTR_SUB`. It should be declared in the `constructions` block among the options of the attribute `mod_template::define`
+  --> tests/should-fail/2_3-unknown-target-names.rs:17:26
+   |
+17 |     #[__CONSTRUCT(foo as ATTR_SUB)]
+   |                          ^^^^^^^^
+
+error: unknown target name `CONS`. It should be declared in the `attribute_substitutions` block among the options of the attribute `mod_template::define`
+  --> tests/should-fail/2_3-unknown-target-names.rs:20:20
+   |
+20 |     #[__SUBSTITUTE(CONS)]
+   |                    ^^^^

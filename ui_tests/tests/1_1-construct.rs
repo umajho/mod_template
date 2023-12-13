@@ -1,4 +1,4 @@
-use flex_mod::construct;
+use mod_template::construct;
 
 fn main() {}
 

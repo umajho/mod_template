@@ -1,7 +1,0 @@
-error: unexpected end of input, expected `as`
- --> tests/should-fail/2_4-flex-mod-bad-construct.rs:5:1
-  |
-5 | #[flex_mod(define_foo; constructions(CONS))]
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  |
-  = note: this error originates in the attribute macro `flex_mod` (in Nightly builds, run with -Z macro-backtrace for more info)

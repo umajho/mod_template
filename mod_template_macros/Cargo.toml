@@ -1,5 +1,5 @@
 [package]
-name = "flex_mod_macros"
+name = "mod_template_macros"
 version.workspace = true
 license.workspace = true
 edition.workspace = true

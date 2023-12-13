@@ -1,4 +1,4 @@
-use flex_mod::extend_parameter_list;
+use mod_template::extend_parameter_list;
 
 fn main() {}
 

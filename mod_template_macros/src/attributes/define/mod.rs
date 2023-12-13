@@ -19,7 +19,7 @@ use crate::{
     utils::substitute_attributes::{substitute_attributes, Substituter},
 };
 
-pub fn flex_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn define(attr: TokenStream, item: TokenStream) -> TokenStream {
     check_top_mod_on_error_abort(item.clone());
     let opts: AttributeOptions = match syn::parse2(attr.clone()) {
         Ok(attr) => attr,
@@ -41,7 +41,7 @@ pub fn flex_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
     quote::quote! {
         macro_rules! #macro_name_ident {
             ($($input:tt)*) => {
-                #[::flex_mod::__monomorphize_mod(
+                #[::mod_template::__monomorphize_mod(
                     // TODO: just pass tokens after `;` in `attr`, since the
                     // macro name is unnecessary for the attribute
                     // `__monomorphize_mod`.
@@ -69,7 +69,7 @@ fn check_top_mod_on_error_abort(input_item: TokenStream) {
                 // header and the order of attributes from those two places
                 // would be ambiguous.
                 proc_macro_error::abort_call_site!(
-                    "attributes directly below the `flex_mod` attribute are not allowed"
+                    "attributes directly below the attribute `mod_template::define` are not allowed"
                 );
             }
         }
@@ -100,7 +100,7 @@ fn check_top_mod_on_error_abort(input_item: TokenStream) {
             format!(
                 "{} {}",
                 "this should always be `__`, to emphasis that",
-                "the `flex_mod` attribute nullifies the name of the module it applied to"
+                "the attribute `mod_template::define` nullifies the name of the module it applied to"
             )
         )
     }
@@ -145,7 +145,7 @@ fn check_helper_attributes(
                             "unknown target name `{}`. {} {}",
                             target_name,
                             "It should be declared in the `constructions` block",
-                            "among the options of the `flex_mod` attribute"
+                            "among the options of the attribute `mod_template::define`"
                         ),
                     ));
                 }
@@ -169,7 +169,7 @@ fn check_helper_attributes(
                         "unknown target name `{}`. {} {}",
                         target_name,
                         "It should be declared in the `attribute_substitutions` block",
-                        "among the options of the `flex_mod` attribute"
+                        "among the options of the attribute `mod_template::define`"
                     ),
                 ));
             }
@@ -183,7 +183,7 @@ fn check_helper_attributes(
 
 #[cfg(test)]
 mod tests {
-    use super::flex_mod;
+    use super::define;
 
     #[test]
     fn basic() {
@@ -210,7 +210,7 @@ mod tests {
         let expected = quote::quote! {
             macro_rules! the_macro_name {
                 ($($input:tt)*) => {
-                    #[::flex_mod::__monomorphize_mod(
+                    #[::mod_template::__monomorphize_mod(
                         (the_macro_name; constructions(FOO), attribute_substitutions(BAR)),
                         { $($input)* }
                     )]
@@ -233,7 +233,7 @@ mod tests {
             }
         };
 
-        let actual = flex_mod(input_attr, input_item);
+        let actual = define(input_attr, input_item);
 
         assert_eq!(actual.to_string(), expected.to_string());
     }

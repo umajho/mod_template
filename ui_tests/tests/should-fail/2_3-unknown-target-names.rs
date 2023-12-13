@@ -1,8 +1,6 @@
-use flex_mod::flex_mod;
-
 fn main() {}
 
-#[flex_mod(define_foo; constructions(CONS), attribute_substitutions(ATTR_SUB))]
+#[mod_template::define(define_foo; constructions(CONS), attribute_substitutions(ATTR_SUB))]
 mod __ {
     #[__CONSTRUCT(foo as CONS)]
     fn good_construction() {}

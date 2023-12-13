@@ -2,16 +2,16 @@
 
 resolver = "2"
 
-members = ["flex_mod", "flex_mod_macros", "ui_tests"]
+members = ["mod_template", "mod_template_macros", "ui_tests"]
 
 [workspace.package]
 version = "0.0.1"
 license = "MIT"
 edition = "2021"
 authors = ["Umaĵo <umajho@proton.me>"]
-repository = "https://github.com/umajho/flex_mod"
+repository = "https://github.com/umajho/mod_template"
 
 [workspace.dependencies]
 
-flex_mod = { version = "0.0.1", path = "flex_mod" }
-flex_mod_macros = { version = "0.0.1", path = "flex_mod_macros" }
+mod_template = { version = "0.0.1", path = "mod_template" }
+mod_template_macros = { version = "0.0.1", path = "mod_template_macros" }

@@ -1,6 +1,6 @@
-# `flex_mod`
+# `mod_template`
 
 Make modules flexible.
 
 This project is still WIP. Please check the documenting of
-`flex_mod_macros::flex_mod` for usage for now.
+`mod_template_macros::define` for usage for now.

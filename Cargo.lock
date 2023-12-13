@@ -302,25 +302,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8fcfdc7a0362c9f4444381a9e697c79d435fe65b52a37466fc2c1184cee9edc6"
 
 [[package]]
-name = "flex_mod"
-version = "0.0.1"
-dependencies = [
- "flex_mod_macros",
-]
-
-[[package]]
-name = "flex_mod_macros"
-version = "0.0.1"
-dependencies = [
- "lazy_static",
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn 2.0.39",
- "typed-builder",
-]
-
-[[package]]
 name = "flume"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -635,6 +616,25 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "mod_template"
+version = "0.0.1"
+dependencies = [
+ "mod_template_macros",
+]
+
+[[package]]
+name = "mod_template_macros"
+version = "0.0.1"
+dependencies = [
+ "lazy_static",
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.39",
+ "typed-builder",
 ]
 
 [[package]]
@@ -1474,7 +1474,7 @@ name = "ui_tests"
 version = "0.0.1"
 dependencies = [
  "async-trait",
- "flex_mod",
+ "mod_template",
  "sqlx",
  "tokio",
  "trybuild",

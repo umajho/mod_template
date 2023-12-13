@@ -1,14 +1,14 @@
 use proc_macro2::TokenTree;
 
-use crate::attributes::{__monomorphize_mod, flex_mod};
+use crate::attributes::{__monomorphize_mod, define};
 
 pub struct AttributeOptionsPair(
-    flex_mod::AttributeOptions,
+    define::AttributeOptions,
     __monomorphize_mod::AttributeOptions,
 );
 
 impl AttributeOptionsPair {
-    pub fn flex_mod(&self) -> &flex_mod::AttributeOptions {
+    pub fn define(&self) -> &define::AttributeOptions {
         &self.0
     }
 
@@ -19,7 +19,7 @@ impl AttributeOptionsPair {
 
 impl syn::parse::Parse for AttributeOptionsPair {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        let flex_mod_attr_opts: flex_mod::AttributeOptions = {
+        let define_attr_opts: define::AttributeOptions = {
             let content;
             syn::parenthesized!(content in input);
             content.parse()?
@@ -38,7 +38,7 @@ impl syn::parse::Parse for AttributeOptionsPair {
             return Err(syn::Error::new(tt.span(), "unexpected"));
         }
 
-        Ok(Self(flex_mod_attr_opts, monomorphize_mod_attr_opts))
+        Ok(Self(define_attr_opts, monomorphize_mod_attr_opts))
     }
 }
 
@@ -53,8 +53,8 @@ impl AttributeOptionsPair {
             };
         }
 
-        let declared_constructions = map_to_ident!(self.flex_mod().constructions());
-        let declared_attr_substs = map_to_ident!(self.flex_mod().attribute_substitutions());
+        let declared_constructions = map_to_ident!(self.define().constructions());
+        let declared_attr_substs = map_to_ident!(self.define().attribute_substitutions());
         let defined_constructions = map_to_ident!(self.__monomorphize_mod().constructions());
         let defined_attr_substs =
             map_to_ident!(self.__monomorphize_mod().attribute_substitutions());
@@ -84,7 +84,7 @@ impl AttributeOptionsPair {
                         "It should be declared in the `",
                         which,
                         "` block",
-                        "among the options of the `flex_mod` attribute"
+                        "among the options of the attribute `mod_template::define`"
                     )
                 } else {
                     format!("missing target name `{}` in {}", target_name_ident, which)
@@ -182,13 +182,13 @@ mod tests {
             construction_declaration::tests::ConstructionDefinitionForTest,
             tests::AttributeOptionsForTest as MonomorphizeModAttributeOptionsForTest,
         },
-        extend_parameter_list::{
-            tests::AttributeOptionsForTest as ExtendParameterListAttributeOptionsForTest, Direction,
-        },
-        flex_mod::attribute_options::{
+        define::attribute_options::{
             attribute_substitution_declaration::tests::AttributeSubstitutionDeclarationForTest,
             construction_declaration::tests::ConstructionDeclarationForTest,
             tests::AttributeOptionsForTest as FlexModAttributeOptionsForTest,
+        },
+        extend_parameter_list::{
+            tests::AttributeOptionsForTest as ExtendParameterListAttributeOptionsForTest, Direction,
         },
     };
 

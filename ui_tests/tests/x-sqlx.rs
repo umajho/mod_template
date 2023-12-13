@@ -62,7 +62,7 @@ impl Store for SqliteStore {
     }
 }
 
-#[flex_mod::flex_mod(define_store_test_suite; constructions(STORE), attribute_substitutions(TEST))]
+#[mod_template::define(define_store_test_suite; constructions(STORE), attribute_substitutions(TEST))]
 mod __ {
     // FIXME: `cargo test` thinks this is unused. See test `2_1` for details.
     #[allow(unused_imports)]

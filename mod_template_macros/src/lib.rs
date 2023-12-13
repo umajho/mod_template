@@ -14,7 +14,7 @@ mod utils;
 /// the function signature) (`BAZ`), one can write:
 ///
 /// ```ignore
-/// #[flex_mod::flex_mod(define_foo_mod; constructions(BAR), attribute_substitutions(BAZ))]
+/// #[mod_template::define(define_foo_mod; constructions(BAR), attribute_substitutions(BAZ))]
 /// mod __ {
 ///     #[__CONSTRUCT(bar as BAR)]
 ///     #[__SUBSTITUTE(BAZ)]
@@ -41,15 +41,15 @@ mod utils;
 /// ```
 #[proc_macro_attribute]
 #[proc_macro_error::proc_macro_error]
-pub fn flex_mod(
+pub fn define(
     attr: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {
-    attributes::flex_mod(attr.into(), item.into()).into()
+    attributes::define(attr.into(), item.into()).into()
 }
 
-/// This attribute is used by the attribute `flex_mod` internally. One should
-/// not use this attribute manually.
+/// This attribute is used by the attribute `mod_template::define` internally.
+/// One should not use this attribute manually.
 #[proc_macro_attribute]
 #[proc_macro_error::proc_macro_error]
 pub fn __monomorphize_mod(

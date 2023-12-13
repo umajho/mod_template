@@ -1,0 +1,5 @@
+error: this should always be `__`, to emphasis that the attribute `mod_template::define` nullifies the name of the module it applied to
+ --> tests/should-fail/2_2-top-mod-bad-name.rs:4:5
+  |
+4 | mod bad_name {}
+  |     ^^^^^^^^

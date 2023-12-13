@@ -1,7 +1,0 @@
-error: this attribute can only be applied to a `mod`
- --> tests/should-fail/2_1-flex-mod-only-mod.rs:5:1
-  |
-5 | #[flex_mod(define_foo)]
-  | ^^^^^^^^^^^^^^^^^^^^^^^
-  |
-  = note: this error originates in the attribute macro `flex_mod` (in Nightly builds, run with -Z macro-backtrace for more info)

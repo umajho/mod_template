@@ -2,9 +2,5 @@
 
 Make modules flexible.
 
-Still working in progress.
-
-- [ ] `#[flex_mod(…)]`.
-  - [x] `#[construct(…)]`.
-  - [x] `#[extend_parameter_list(…)]`.
-  - [ ] (priv) `substitute_attributes(…)`.
+This project is still WIP. Please check the documenting of
+`flex_mod_macros::flex_mod` for usage for now.

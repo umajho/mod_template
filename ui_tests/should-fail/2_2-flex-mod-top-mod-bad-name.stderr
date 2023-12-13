@@ -1,0 +1,5 @@
+error: this should always be `__`, to emphasis that the `flex_mod` attribute nullifies the name of the module it applied to
+ --> should-fail/2_2-flex-mod-top-mod-bad-name.rs:6:5
+  |
+6 | mod bad_name {}
+  |     ^^^^^^^^

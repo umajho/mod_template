@@ -32,10 +32,10 @@ pub fn construct(attr: TokenStream, item: TokenStream) -> TokenStream {
 
                 let mut inner_output = TokenStream::new();
                 for construction in &opts.constructions {
-                    let pat = &construction.let_pat;
-                    let expr = &construction.to_be_expr;
+                    let pattern_to_construct = &construction.pattern_to_construct;
+                    let constructor = &construction.constructor;
                     quote::quote! {
-                        let #pat = #expr;
+                        let #pattern_to_construct = #constructor;
                     }
                     .to_tokens(&mut inner_output);
                 }
@@ -64,10 +64,10 @@ struct AttributeOptions {
     constructions: Vec<Construction>,
 }
 
-/// `«let_pat» = «to_be_expr»`.
+/// `«pattern_to_construct» as «constructor»`.
 struct Construction {
-    let_pat: syn::Pat,
-    to_be_expr: syn::Expr,
+    pattern_to_construct: syn::Pat,
+    constructor: syn::Expr,
 }
 
 impl syn::parse::Parse for AttributeOptions {
@@ -83,13 +83,13 @@ impl syn::parse::Parse for AttributeOptions {
 
 impl syn::parse::Parse for Construction {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        let let_pat = syn::Pat::parse_single(input)?;
+        let pattern_to_construct = syn::Pat::parse_single(input)?;
         let _: syn::Token![=] = input.parse()?;
-        let to_be_expr = input.parse()?;
+        let constructor = input.parse()?;
 
         Ok(Self {
-            let_pat,
-            to_be_expr,
+            pattern_to_construct,
+            constructor,
         })
     }
 }

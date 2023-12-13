@@ -82,14 +82,29 @@ fn do_extend_parameter_list(
     }
 }
 
-struct AttributeOptions {
+pub struct AttributeOptions {
     direction: Direction,
     parameter_list: Vec<TokenTree>,
 }
 
+impl AttributeOptions {
+    pub fn direction(&self) -> Direction {
+        self.direction
+    }
+
+    pub fn parameter_list(&self) -> &Vec<TokenTree> {
+        &self.parameter_list
+    }
+
+    pub fn is_noop(&self) -> bool {
+        self.parameter_list.is_empty()
+    }
+}
+
 /// Only `append` is supported for now
-#[derive(Clone, Copy)]
-enum Direction {
+#[derive(Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(test, derive(Debug))]
+pub enum Direction {
     Append,
 }
 
@@ -110,9 +125,21 @@ impl syn::parse::Parse for AttributeOptions {
     }
 }
 
+impl quote::ToTokens for AttributeOptions {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        match self.direction() {
+            Direction::Append => quote::quote!(..,).to_tokens(tokens),
+        }
+        let list = self.parameter_list().clone();
+        TokenStream::from_iter(list).to_tokens(tokens);
+    }
+}
+
 #[cfg(test)]
-mod tests {
-    use super::extend_parameter_list;
+pub(crate) mod tests {
+    use proc_macro2::TokenStream;
+
+    use super::{extend_parameter_list, AttributeOptions, Direction};
 
     #[test]
     fn basic() {
@@ -150,5 +177,24 @@ mod tests {
         let actual = extend_parameter_list(input_attr, input_item);
 
         assert_eq!(actual.to_string(), expected.to_string());
+    }
+
+    #[derive(Debug, PartialEq, Eq, typed_builder::TypedBuilder)]
+    pub struct AttributeOptionsForTest {
+        direction: Direction,
+        parameter_list: String,
+    }
+    impl From<AttributeOptions> for AttributeOptionsForTest {
+        fn from(value: AttributeOptions) -> Self {
+            let AttributeOptions {
+                direction,
+                parameter_list,
+            } = value;
+
+            Self {
+                direction,
+                parameter_list: TokenStream::from_iter(parameter_list).to_string(),
+            }
+        }
     }
 }

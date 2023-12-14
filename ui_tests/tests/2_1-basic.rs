@@ -29,7 +29,11 @@ impl Sumer for BuiltinSumer {
     }
 }
 
-#[mod_template::define(define_sumer_test_suite; constructions(SUMER), attribute_substitutions(TEST))]
+#[mod_template::define(
+    define_sumer_test_suite;
+    constructions(SUMER -> impl crate::Sumer),
+    attribute_substitutions(TEST),
+)]
 mod __ {
     // FIXME: rust thinks that the above import is unused during `cargo test`,
     // why? (My editor's lsp, `cargo check`, and `cargo clippy` still work

@@ -11,7 +11,7 @@
 /// // extend the function signature) (`BAZ`), one can write:
 /// #[mod_template::define(
 ///     define_foo_mod;
-///     constructions(BAR),
+///     constructions(BAR -> impl crate::Bar),
 ///     attribute_substitutions(BAZ)),
 /// ]
 /// mod __ {

@@ -216,7 +216,7 @@ mod tests {
         let param_list = quote::quote!(a_param: AType);
 
         let input = quote::quote!(
-            (macro_name; constructions(CONS), attribute_substitutions(ATTR_SUBST)),
+            (macro_name; constructions(CONS -> impl ToCons), attribute_substitutions(ATTR_SUBST)),
             {
                 #mod_header;
                 constructions { CONS => #expr_new_something },
@@ -229,6 +229,7 @@ mod tests {
                 .macro_name("macro_name".to_string())
                 .constructions(vec![ConstructionDeclarationForTest::builder()
                     .target_name("CONS".to_string())
+                    .ty("impl ToCons".to_string())
                     .build()])
                 .attribute_substitutions(vec![AttributeSubstitutionDeclarationForTest::builder()
                     .target_name("ATTR_SUBST".to_string())

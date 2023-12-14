@@ -187,8 +187,11 @@ mod tests {
 
     #[test]
     fn basic() {
-        let input_attr =
-            quote::quote!(the_macro_name; constructions(FOO), attribute_substitutions(BAR));
+        let input_opts = quote::quote!(
+            the_macro_name;
+            constructions(FOO -> impl Foo),
+            attribute_substitutions(BAR)
+        );
         let input_item = quote::quote! {
             mod __ {
                 #[__CONSTRUCT(foo as FOO)]
@@ -211,7 +214,7 @@ mod tests {
             macro_rules! the_macro_name {
                 ($($input:tt)*) => {
                     #[::mod_template::__monomorphize_mod(
-                        (the_macro_name; constructions(FOO), attribute_substitutions(BAR)),
+                        (#input_opts),
                         { $($input)* }
                     )]
                     mod __ {
@@ -233,7 +236,7 @@ mod tests {
             }
         };
 
-        let actual = define(input_attr, input_item);
+        let actual = define(input_opts, input_item);
 
         assert_eq!(actual.to_string(), expected.to_string());
     }

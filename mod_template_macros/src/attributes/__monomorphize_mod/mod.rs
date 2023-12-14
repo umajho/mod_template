@@ -38,7 +38,17 @@ pub fn __monomorphize_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
         mod_group.stream()
     };
     let opts = opts_pair.__monomorphize_mod();
-    let output_items = match monomorphize_items(mod_items, opts) {
+    let type_map = {
+        let mut type_map: HashMap<String, syn::Type> = HashMap::new();
+        for construction in opts_pair.define().constructions() {
+            type_map.insert(
+                construction.target_name_ident().to_string(),
+                construction.ty().clone(),
+            );
+        }
+        type_map
+    };
+    let output_items = match monomorphize_items(mod_items, opts, type_map) {
         Ok(output_items) => output_items,
         Err(errs) => {
             // TODO: DRY
@@ -57,10 +67,13 @@ pub fn __monomorphize_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 const EXPECT_AVAILABLE: &str = "the availability of the definition should already be checked by calling `opts_pair.validate()` in the outer function";
+const EXPECT_CONSTRUCTION_TYPE_AVAILABLE: &str =
+    "any available construction should have a corresponding type";
 
 fn monomorphize_items<'a>(
     input_item: TokenStream,
     opts: &'a AttributeOptions,
+    type_map: HashMap<String, syn::Type>,
 ) -> Result<TokenStream, syn::Error> {
     let opts = Rc::new(opts);
     let opts_for_construct = opts.clone();
@@ -77,15 +90,19 @@ fn monomorphize_items<'a>(
 
             let mut output = TokenStream::new();
             for construction in helper_opts.constructions() {
+                let target_name = construction.target_name_ident().to_string();
                 let def = opts
                     .constructions()
                     .iter()
-                    .find(|x| *x.target_name_ident() == *construction.target_name_ident())
+                    .find(|x| *x.target_name_ident() == target_name)
                     .expect(EXPECT_AVAILABLE);
                 let pattern_to_construct = construction.pattern_to_construct();
+                let ty = type_map
+                    .get(&target_name)
+                    .expect(EXPECT_CONSTRUCTION_TYPE_AVAILABLE);
                 let construction = def.construction();
                 quote::quote!(
-                    #[::mod_template::construct(#pattern_to_construct = #construction)])
+                    #[::mod_template::construct(#pattern_to_construct: #ty = #construction)])
                 .to_tokens(&mut output);
             }
 
@@ -128,7 +145,7 @@ mod tests {
     #[test]
     fn basic() {
         let input_attr = quote::quote!(
-            (macro_name; constructions(CONS), attribute_substitutions(ATTR_SUBST)),
+            (macro_name; constructions(CONS -> impl ToCons), attribute_substitutions(ATTR_SUBST)),
             {
                 mod a_mod;
                 constructions {
@@ -149,7 +166,7 @@ mod tests {
 
         let expected = quote::quote! {
             mod a_mod {
-                #[::mod_template::construct(to_construct = new_something())]
+                #[::mod_template::construct(to_construct: impl ToCons = new_something())]
                 #[::mod_template::extend_parameter_list(.., a_param: AType)]
                 #[an_attr]
                 fn an_fn() {}

@@ -119,7 +119,7 @@ pub(crate) mod tests {
     fn basic() {
         let input = quote::quote!(
             the_macro_name;
-            constructions(FOO, BAR),
+            constructions(FOO -> impl Foo, BAR -> impl Bar),
             attribute_substitutions(FOO, BAZ),
         );
 
@@ -128,9 +128,11 @@ pub(crate) mod tests {
             .constructions(vec![
                 ConstructionDeclarationForTest::builder()
                     .target_name("FOO".to_string())
+                    .ty("impl Foo".to_string())
                     .build(),
                 ConstructionDeclarationForTest::builder()
                     .target_name("BAR".to_string())
+                    .ty("impl Bar".to_string())
                     .build(),
             ])
             .attribute_substitutions(vec![

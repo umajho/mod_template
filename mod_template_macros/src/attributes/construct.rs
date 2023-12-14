@@ -114,8 +114,8 @@ impl quote::ToTokens for Construction {
             let constructor = &self.constructor;
             quote::quote! {
                 {
-                    fn type_checked() -> #ty { #constructor }
-                    type_checked()
+                    fn type_checked(v: #ty) -> #ty { v }
+                    type_checked(#constructor)
                 }
             }
             .to_tokens(tokens);
@@ -149,8 +149,8 @@ mod tests {
                 let one = 1;
                 let mut to_be_three: i32 = 2;
                 let four_text = {
-                    fn type_checked() -> impl std::fmt::Display { "4" }
-                    type_checked()
+                    fn type_checked(v: impl std::fmt::Display) -> impl std::fmt::Display { v }
+                    type_checked("4")
                 };
                 to_be_three += 1;
                 assert_eq!(format!("{}", one + to_be_three), four_text.to_string())

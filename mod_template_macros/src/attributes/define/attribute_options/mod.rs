@@ -1,6 +1,8 @@
 pub(crate) mod attribute_substitution_declaration;
 pub(crate) mod construction_declaration;
 
+use std::collections::HashMap;
+
 use proc_macro2::Ident;
 
 pub use self::attribute_substitution_declaration::AttributeSubstitutionDeclaration;
@@ -21,6 +23,17 @@ impl AttributeOptions {
     }
     pub fn attribute_substitutions(&self) -> &Vec<AttributeSubstitutionDeclaration> {
         &self.attribute_substitutions
+    }
+
+    pub fn build_type_map(&self) -> HashMap<String, syn::Type> {
+        let mut type_map: HashMap<String, syn::Type> = HashMap::new();
+        for construction in self.constructions() {
+            type_map.insert(
+                construction.target_name_ident().to_string(),
+                construction.ty().clone(),
+            );
+        }
+        type_map
     }
 }
 

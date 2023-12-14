@@ -10,6 +10,7 @@ use proc_macro2::{Ident, TokenStream, TokenTree};
 pub use attribute_options::{
     AttributeOptions, AttributeSubstitutionDeclaration, ConstructionDeclaration,
 };
+use quote::ToTokens;
 
 use crate::{
     helper_attributes::{
@@ -27,18 +28,30 @@ pub fn define(attr: TokenStream, item: TokenStream) -> TokenStream {
     };
     let macro_name_ident = opts.macro_name_ident();
 
-    let output_item = match check_helper_attributes(item, &opts) {
-        Ok(output) => output,
-        Err(errors) => {
-            let mut output = TokenStream::new();
-            for error in errors {
-                output.extend(error.to_compile_error());
+    let output_item = item.clone();
+
+    let dummy_wrapper_ident = Ident::new(
+        &format!(
+            "__mod_template__compiler_check_dummy__{}",
+            *macro_name_ident
+        ),
+        macro_name_ident.span(),
+    );
+    let compiler_check_dummy_item =
+        match make_compiler_check_dummy_item_and_check_helper_attributes(item, &opts) {
+            Ok(output) => output,
+            Err(err) => {
+                let mut output = TokenStream::new();
+                output.extend(err.to_compile_error());
+                return output;
             }
-            return output;
-        }
-    };
+        };
 
     quote::quote! {
+        #[cfg(test)]
+        #[allow(non_snake_case)]
+        mod #dummy_wrapper_ident { #compiler_check_dummy_item }
+
         macro_rules! #macro_name_ident {
             ($($input:tt)*) => {
                 #[::mod_template::__monomorphize_mod(
@@ -106,18 +119,11 @@ fn check_top_mod_on_error_abort(input_item: TokenStream) {
     }
 }
 
-fn check_helper_attributes(
+fn make_compiler_check_dummy_item_and_check_helper_attributes(
     input_item: TokenStream,
     opts: &AttributeOptions,
 ) -> Result<TokenStream, syn::Error> {
-    let constructions = {
-        let constructions = opts
-            .constructions()
-            .iter()
-            .map(|item| item.target_name_ident().to_string());
-        let constructions: HashSet<_> = HashSet::from_iter(constructions);
-        Rc::new(constructions)
-    };
+    let constructions = Rc::new(opts.build_type_map());
 
     let attribute_substitutions = {
         let attribute_substitutions = opts
@@ -135,10 +141,11 @@ fn check_helper_attributes(
             let meta = meta.require_list()?;
             let opts: ConstructHelperAttributeOptions = syn::parse2(meta.tokens.clone())?;
 
+            let mut result = TokenStream::new();
             for construction in opts.constructions() {
                 let target_name_ident = construction.target_name_ident();
                 let target_name = target_name_ident.to_string();
-                if !constructions.contains(&target_name) {
+                let Some(ty) = constructions.get(&target_name) else {
                     return Err(syn::Error::new(
                         target_name_ident.span(),
                         format!(
@@ -148,10 +155,17 @@ fn check_helper_attributes(
                             "among the options of the attribute `mod_template::define`"
                         ),
                     ));
-                }
+                };
+                let pat = construction.pattern_to_construct();
+                quote::quote!(
+                    #[::mod_template::construct(
+                        #pat: #ty = (|| -> #ty { unreachable!() })()
+                    )]
+                )
+                .to_tokens(&mut result);
             }
 
-            Ok(quote::quote!(#[#meta]))
+            Ok(result)
         }),
     );
     attr_map.insert(
@@ -174,7 +188,7 @@ fn check_helper_attributes(
                 ));
             }
 
-            Ok(quote::quote!(#[#meta]))
+            Ok(quote::quote!())
         }),
     );
 
@@ -211,6 +225,20 @@ mod tests {
         };
 
         let expected = quote::quote! {
+            #[cfg(test)]
+            #[allow(non_snake_case)]
+            mod __mod_template__compiler_check_dummy__the_macro_name {
+                mod __ {
+                    #[::mod_template::construct(foo: Foo = (|| -> Foo { unreachable!() })())]
+                    fn an_fn() {}
+                    fn a_second_fn() {}
+                    mod a_sub_mod {
+                        fn a_third_fn() {}
+                    }
+                    #[::mod_template::construct(foo: Foo = (|| -> Foo { unreachable!() })())]
+                    fn a_fourth_fn() {}
+                }
+            }
             macro_rules! the_macro_name {
                 ($($input:tt)*) => {
                     #[::mod_template::__monomorphize_mod(

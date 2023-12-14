@@ -38,16 +38,7 @@ pub fn __monomorphize_mod(attr: TokenStream, item: TokenStream) -> TokenStream {
         mod_group.stream()
     };
     let opts = opts_pair.__monomorphize_mod();
-    let type_map = {
-        let mut type_map: HashMap<String, syn::Type> = HashMap::new();
-        for construction in opts_pair.define().constructions() {
-            type_map.insert(
-                construction.target_name_ident().to_string(),
-                construction.ty().clone(),
-            );
-        }
-        type_map
-    };
+    let type_map = opts_pair.define().build_type_map();
     let output_items = match monomorphize_items(mod_items, opts, type_map) {
         Ok(output_items) => output_items,
         Err(errs) => {

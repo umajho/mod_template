@@ -62,7 +62,7 @@ pub fn __monomorphize_mod(
 /// Turns something like:
 ///
 /// ```ignore
-/// #[construct(one = 1, mut to_be_three = 2)]
+/// #[construct(one = 1, mut to_be_three: i32 = 2)]
 /// fn four() -> i32 {
 ///     to_be_three += 1;
 ///     one + to_be_three
@@ -74,7 +74,7 @@ pub fn __monomorphize_mod(
 /// ```no_run
 /// fn four() -> i32 {
 ///     let one = 1;
-///     let mut to_be_three = 2;
+///     let mut to_be_three: i32 = 2;
 ///     to_be_three += 1;
 ///     one + to_be_three
 /// }

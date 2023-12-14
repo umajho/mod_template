@@ -32,12 +32,7 @@ pub fn construct(attr: TokenStream, item: TokenStream) -> TokenStream {
 
                 let mut inner_output = TokenStream::new();
                 for construction in &opts.constructions {
-                    let pattern_to_construct = &construction.pattern_to_construct;
-                    let constructor = &construction.constructor;
-                    quote::quote! {
-                        let #pattern_to_construct = #constructor;
-                    }
-                    .to_tokens(&mut inner_output);
+                    quote::quote! { let #construction; }.to_tokens(&mut inner_output);
                 }
 
                 inner_output.extend(group.stream());
@@ -67,6 +62,7 @@ struct AttributeOptions {
 /// `«pattern_to_construct» as «constructor»`.
 struct Construction {
     pattern_to_construct: syn::Pat,
+    ty: Option<syn::Type>,
     constructor: syn::Expr,
 }
 
@@ -84,13 +80,32 @@ impl syn::parse::Parse for AttributeOptions {
 impl syn::parse::Parse for Construction {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let pattern_to_construct = syn::Pat::parse_single(input)?;
+        let colon: Option<syn::Token![:]> = input.parse()?;
+        let ty = if colon.is_some() {
+            Some(syn::Type::parse(input)?)
+        } else {
+            None
+        };
         let _: syn::Token![=] = input.parse()?;
         let constructor = input.parse()?;
 
         Ok(Self {
             pattern_to_construct,
+            ty,
             constructor,
         })
+    }
+}
+
+impl quote::ToTokens for Construction {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        self.pattern_to_construct.to_tokens(tokens);
+        if let Some(ty) = &self.ty {
+            quote::quote!(:).to_tokens(tokens);
+            ty.to_tokens(tokens);
+        }
+        quote::quote!(=).to_tokens(tokens);
+        self.constructor.to_tokens(tokens);
     }
 }
 
@@ -100,7 +115,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let input_attr = quote::quote!(one = 1, mut to_be_three = 2);
+        let input_attr = quote::quote!(one = 1, mut to_be_three: i32 = 2);
         let input_item = quote::quote! {
             fn four() -> i32 {
                 to_be_three += 1;
@@ -111,7 +126,7 @@ mod tests {
         let expected = quote::quote! {
             fn four() -> i32 {
                 let one = 1;
-                let mut to_be_three = 2;
+                let mut to_be_three: i32 = 2;
                 to_be_three += 1;
                 one + to_be_three
             }

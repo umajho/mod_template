@@ -189,7 +189,7 @@ mod tests {
     fn basic() {
         let input_opts = quote::quote!(
             the_macro_name;
-            constructions(FOO -> impl Foo),
+            constructions(FOO -> Foo),
             attribute_substitutions(BAR)
         );
         let input_item = quote::quote! {

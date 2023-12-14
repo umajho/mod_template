@@ -19,6 +19,12 @@ pub fn parse(input: syn::parse::ParseStream) -> syn::Result<Vec<ConstructionDecl
         let target_name_ident: syn::Ident = input.parse()?;
         let _: syn::Token![->] = input.parse()?;
         let ty: syn::Type = input.parse()?;
+        if let syn::Type::ImplTrait(syn::TypeImplTrait { impl_token, .. }) = ty {
+            return Err(syn::Error::new(
+                impl_token.span,
+                "`impl` types are unsupported for now",
+            ));
+        };
 
         Ok(ConstructionDeclaration {
             target_name_ident,

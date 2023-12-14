@@ -1,6 +1,6 @@
 fn main() {}
 
-#[mod_template::define(define_foo; constructions(CONS -> impl ToCons))]
+#[mod_template::define(define_foo; constructions(CONS -> ToCons))]
 mod __ {
     #[__CONSTRUCT(CONS)]
     fn an_fn() {}

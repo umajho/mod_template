@@ -145,7 +145,7 @@ mod tests {
     #[test]
     fn basic() {
         let input_attr = quote::quote!(
-            (macro_name; constructions(CONS -> impl ToCons), attribute_substitutions(ATTR_SUBST)),
+            (macro_name; constructions(CONS -> ToCons), attribute_substitutions(ATTR_SUBST)),
             {
                 mod a_mod;
                 constructions {
@@ -166,7 +166,7 @@ mod tests {
 
         let expected = quote::quote! {
             mod a_mod {
-                #[::mod_template::construct(to_construct: impl ToCons = new_something())]
+                #[::mod_template::construct(to_construct: ToCons = new_something())]
                 #[::mod_template::extend_parameter_list(.., a_param: AType)]
                 #[an_attr]
                 fn an_fn() {}

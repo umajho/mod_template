@@ -1,6 +1,6 @@
 fn main() {}
 
-#[mod_template::define(define_foo; constructions(CONS -> impl ToCons), attribute_substitutions(ATTR_SUB))]
+#[mod_template::define(define_foo; constructions(CONS -> ToCons), attribute_substitutions(ATTR_SUB))]
 mod __ {
     #[__CONSTRUCT(foo as CONS)]
     fn good_construction() {}

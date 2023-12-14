@@ -64,7 +64,7 @@ impl Store for SqliteStore {
 
 #[mod_template::define(
     define_store_test_suite;
-    constructions(STORE -> impl crate::Store),
+    constructions(STORE -> Box<dyn crate::Store>),
     attribute_substitutions(TEST),
 )]
 mod __ {
@@ -84,7 +84,7 @@ mod __ {
 define_store_test_suite! {
     mod in_memory_store_test_suite;
     constructions {
-        STORE => crate::InMemoryStore::new(),
+        STORE => Box::new(crate::InMemoryStore::new()),
     },
     attribute_substitutions {
         TEST => #[::tokio::test],
@@ -94,7 +94,7 @@ define_store_test_suite! {
 define_store_test_suite! {
     mod sqlite_store_test_suite;
     constructions {
-        STORE => crate::SqliteStore::new(pool.clone()).await,
+        STORE => Box::new(crate::SqliteStore::new(pool.clone()).await),
     },
     attribute_substitutions {
         TEST => #[::sqlx::test] (.., pool: ::sqlx::Pool<sqlx::sqlite::Sqlite>),

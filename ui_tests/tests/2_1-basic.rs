@@ -31,7 +31,7 @@ impl Sumer for BuiltinSumer {
 
 #[mod_template::define(
     define_sumer_test_suite;
-    constructions(SUMER -> impl crate::Sumer),
+    constructions(SUMER -> Box<dyn crate::Sumer>),
     attribute_substitutions(TEST),
 )]
 mod __ {
@@ -52,7 +52,7 @@ mod __ {
 define_sumer_test_suite! {
     mod imperative_sumer_test_suite;
     constructions {
-        SUMER => crate::ImperativeSumer{},
+        SUMER => Box::new(crate::ImperativeSumer{}),
     },
     attribute_substitutions {
         TEST => #[test],
@@ -62,7 +62,7 @@ define_sumer_test_suite! {
 define_sumer_test_suite! {
     mod functional_sumer_test_suite;
     constructions {
-        SUMER => crate::FunctionalSumer{},
+        SUMER => Box::new(crate::FunctionalSumer{}),
     },
     attribute_substitutions {
         TEST => #[test],
@@ -72,7 +72,7 @@ define_sumer_test_suite! {
 define_sumer_test_suite! {
     mod builtin_sumer_test_suite;
     constructions {
-        SUMER => crate::BuiltinSumer{}
+        SUMER => Box::new(crate::BuiltinSumer{})
     },
     attribute_substitutions {
         TEST => #[test],

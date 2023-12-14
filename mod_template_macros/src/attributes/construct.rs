@@ -101,11 +101,27 @@ impl quote::ToTokens for Construction {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         self.pattern_to_construct.to_tokens(tokens);
         if let Some(ty) = &self.ty {
-            quote::quote!(:).to_tokens(tokens);
-            ty.to_tokens(tokens);
+            if let syn::Type::ImplTrait(..) = ty {
+                // noop
+            } else {
+                quote::quote!(:).to_tokens(tokens);
+                ty.to_tokens(tokens);
+            }
         }
         quote::quote!(=).to_tokens(tokens);
-        self.constructor.to_tokens(tokens);
+        if let Some(syn::Type::ImplTrait(..)) = &self.ty {
+            let ty = &self.ty;
+            let constructor = &self.constructor;
+            quote::quote! {
+                {
+                    fn type_checked() -> #ty { #constructor }
+                    type_checked()
+                }
+            }
+            .to_tokens(tokens);
+        } else {
+            self.constructor.to_tokens(tokens);
+        }
     }
 }
 
@@ -115,20 +131,29 @@ mod tests {
 
     #[test]
     fn basic() {
-        let input_attr = quote::quote!(one = 1, mut to_be_three: i32 = 2);
+        let input_attr = quote::quote!(
+            one = 1, mut to_be_three: i32 = 2,
+            four_text: impl std::fmt::Display = "4",
+        );
         let input_item = quote::quote! {
-            fn four() -> i32 {
+            #[test]
+            fn test_one_adds_three() {
                 to_be_three += 1;
-                one + to_be_three
+                assert_eq!(format!("{}", one + to_be_three), four_text.to_string())
             }
         };
 
         let expected = quote::quote! {
-            fn four() -> i32 {
+            #[test]
+            fn test_one_adds_three() {
                 let one = 1;
                 let mut to_be_three: i32 = 2;
+                let four_text = {
+                    fn type_checked() -> impl std::fmt::Display { "4" }
+                    type_checked()
+                };
                 to_be_three += 1;
-                one + to_be_three
+                assert_eq!(format!("{}", one + to_be_three), four_text.to_string())
             }
         };
 

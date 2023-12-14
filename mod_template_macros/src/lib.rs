@@ -63,20 +63,26 @@ pub fn __monomorphize_mod(
 ///
 /// ```ignore
 /// #[construct(one = 1, mut to_be_three: i32 = 2)]
-/// fn four() -> i32 {
+/// #[test]
+/// fn test_one_adds_three() {
 ///     to_be_three += 1;
-///     one + to_be_three
+///     assert_eq!(format!("{}", one + to_be_three), four_text.to_string())
 /// }
 /// ```
 ///
 /// into:
 ///
 /// ```no_run
-/// fn four() -> i32 {
+/// #[test]
+/// fn test_one_adds_three() {
 ///     let one = 1;
 ///     let mut to_be_three: i32 = 2;
+///     let four_text = {
+///         fn type_checked() -> impl std::fmt::Display { "4" }
+///         type_checked()
+///     };
 ///     to_be_three += 1;
-///     one + to_be_three
+///     assert_eq!(format!("{}", one + to_be_three), four_text.to_string())
 /// }
 /// ```
 #[proc_macro_attribute]

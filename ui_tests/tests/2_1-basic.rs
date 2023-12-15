@@ -35,7 +35,7 @@ impl Sumer for BuiltinSumer {
     attribute_substitutions(TEST),
 )]
 mod __ {
-    // FIXME: rust thinks that the above import is unused during `cargo test`,
+    // FIXME: rust thinks that the import below is unused during `cargo test`,
     // why? (My editor's lsp, `cargo check`, and `cargo clippy` still work
     // fine in this case.)
     #[allow(unused_imports)]

@@ -63,7 +63,7 @@ impl Store for SqliteStore {
 }
 
 #[mod_template::define(
-    define_store_test_suite;
+    macro_rules! define_store_test_suite;
     constructions(STORE -> Box<dyn crate::Store>),
     attribute_substitutions(TEST),
 )]

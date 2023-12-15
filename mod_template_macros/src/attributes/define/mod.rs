@@ -26,15 +26,13 @@ pub fn define(attr: TokenStream, item: TokenStream) -> TokenStream {
         Ok(attr) => attr,
         Err(err) => return err.to_compile_error(),
     };
-    let macro_name_ident = opts.macro_name_ident();
+    let mbe_header = opts.mbe_header();
+    let macro_name_ident = mbe_header.name_ident();
 
     let output_item = item.clone();
 
     let dummy_wrapper_ident = Ident::new(
-        &format!(
-            "__mod_template__compiler_check_dummy__{}",
-            *macro_name_ident
-        ),
+        &format!("__mod_template__compiler_check_dummy__{}", macro_name_ident),
         macro_name_ident.span(),
     );
     let compiler_check_dummy_item =
@@ -52,7 +50,7 @@ pub fn define(attr: TokenStream, item: TokenStream) -> TokenStream {
         #[allow(non_snake_case)]
         mod #dummy_wrapper_ident { #compiler_check_dummy_item }
 
-        macro_rules! #macro_name_ident {
+        #mbe_header {
             ($($input:tt)*) => {
                 #[::mod_template::__monomorphize_mod(
                     // TODO: just pass tokens after `;` in `attr`, since the
@@ -67,7 +65,7 @@ pub fn define(attr: TokenStream, item: TokenStream) -> TokenStream {
                     { $($input)* }
                 )]
                 #output_item
-            };
+            }
         }
     }
 }
@@ -202,7 +200,7 @@ mod tests {
     #[test]
     fn basic() {
         let input_opts = quote::quote!(
-            the_macro_name;
+            macro_rules! the_macro_name;
             constructions(FOO -> Foo),
             attribute_substitutions(BAR)
         );
@@ -260,7 +258,7 @@ mod tests {
                         #[__SUBSTITUTE(BAR)]
                         fn a_fourth_fn() {}
                     }
-                };
+                }
             }
         };
 

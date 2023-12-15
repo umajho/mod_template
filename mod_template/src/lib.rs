@@ -10,7 +10,7 @@
 /// // ways to construct variables (`BAR`), substitute attributes (along with
 /// // extend the function signature) (`BAZ`), one can write:
 /// #[mod_template::define(
-///     define_foo_mod;
+///     macro_rules! define_foo_mod;
 ///     constructions(BAR -> impl crate::BarTrait),
 ///     attribute_substitutions(BAZ)),
 /// ]

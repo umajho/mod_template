@@ -136,7 +136,7 @@ mod tests {
     #[test]
     fn basic() {
         let input_attr = quote::quote!(
-            (macro_name; constructions(CONS -> ToCons), attribute_substitutions(ATTR_SUBST)),
+            (macro_rules! macro_name; constructions(CONS -> ToCons), attribute_substitutions(ATTR_SUBST)),
             {
                 mod a_mod;
                 constructions {

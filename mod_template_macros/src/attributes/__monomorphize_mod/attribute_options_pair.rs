@@ -216,7 +216,11 @@ mod tests {
         let param_list = quote::quote!(a_param: AType);
 
         let input = quote::quote!(
-            (macro_name; constructions(CONS -> ToCons), attribute_substitutions(ATTR_SUBST)),
+            (
+                macro_rules! macro_name;
+                constructions(CONS -> ToCons),
+                attribute_substitutions(ATTR_SUBST)
+            ),
             {
                 #mod_header;
                 constructions { CONS => #expr_new_something },
@@ -226,7 +230,7 @@ mod tests {
 
         let expected = AttributeOptionsPairForTest(
             FlexModAttributeOptionsForTest::builder()
-                .macro_name("macro_name".to_string())
+                .mbe_header(quote::quote!(macro_rules! macro_name).to_string())
                 .constructions(vec![ConstructionDeclarationForTest::builder()
                     .target_name("CONS".to_string())
                     .ty("ToCons".to_string())

@@ -30,7 +30,7 @@ impl Sumer for BuiltinSumer {
 }
 
 #[mod_template::define(
-    define_sumer_test_suite;
+    macro_rules! define_sumer_test_suite;
     constructions(SUMER -> Box<dyn crate::Sumer>),
     attribute_substitutions(TEST),
 )]

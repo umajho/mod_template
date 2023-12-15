@@ -1,7 +1,7 @@
 error: attributes directly below the attribute `mod_template::define` are not allowed
  --> tests/should-fail/2_5-top-mod-attributes-below.rs:3:1
   |
-3 | #[mod_template::define]
-  | ^^^^^^^^^^^^^^^^^^^^^^^
+3 | #[mod_template::define(macro_rules! define_foo)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   |
   = note: this error originates in the attribute macro `mod_template::define` (in Nightly builds, run with -Z macro-backtrace for more info)

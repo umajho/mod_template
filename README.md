@@ -1,7 +1,7 @@
 # `mod_template`
 
-![Crates.io](https://img.shields.io/crates/v/mod_template)
-![docs.rs](https://img.shields.io/docsrs/mod_template)
+[![Crates.io](https://img.shields.io/crates/v/mod_template)](https://crates.io/crates/mod_template)
+[![docs.rs](https://img.shields.io/docsrs/mod_template)](https://docs.rs/mod_template)
 
 Make modules flexible.
 
